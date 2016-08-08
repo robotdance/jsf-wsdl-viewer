@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="services/amuc" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="services" targetNamespace="services/amuc">
+<wsdl:documentation>Desenvolvido para integracao entre o modulo UC - Uso Continuo do Sistema Central  e parceiros do AMUC - auxilio medicamento de uso continuo. Versao 1.0</wsdl:documentation>
+  <wsdl:types>
+<xs:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="services/amuc" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="services/amuc">
+			
+  <xs:complexType name="entradaAtualizarProcesso">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="processo" type="tns:processo"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="processo">
+				
+    <xsd:annotation>
+					
+      <xsd:documentation>Representa o processo AMUC de um beneficiario na Capesesp</xsd:documentation>
+				
+    </xsd:annotation>
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="identificacaoProcesso" type="tns:identificacaoProcesso"/>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="beneficiario" type="tns:beneficiario"/>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="receita" type="tns:receita"/>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="deferimentoProcesso" type="tns:deferimentoProcesso"/>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="versao" type="xs:int"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="identificacaoProcesso">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="codigoFuncional" type="xs:string"/>
+					
+      <xs:element minOccurs="0" name="codigoCapesesp" type="xs:string"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="beneficiario">
+				
+    <xs:sequence>
+					
+      <xs:element minOccurs="0" name="identificacaoBeneficiario" type="tns:identificacaoBeneficiario"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="identificacaoBeneficiario">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="matriculaCapesesp" type="tns:matriculaCapesesp"/>
+					
+      <xs:element minOccurs="0" name="identificacaoProtheus" type="tns:identificacaoProtheus"/>
+					
+      <xs:element minOccurs="0" name="idTotalPrev" type="xs:string"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="matriculaCapesesp">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="siape" type="xs:int"/>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="sequencial" type="xs:int"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="identificacaoProtheus">
+				
+    <xs:sequence>
+					
+      <xs:element minOccurs="0" name="codigoBeneficiario" type="xs:string"/>
+					
+      <xs:element minOccurs="0" name="codigoCliente" type="xs:string"/>
+					
+      <xs:element minOccurs="0" name="codigoFornecedor" type="xs:string"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="receita">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="data" type="xs:dateTime"/>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="medico" type="tns:medico"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="medico">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="nome" type="xs:string"/>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="crm" type="xs:string"/>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="ufCrm" type="xs:string"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="deferimentoProcesso">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="codigo" type="xs:int"/>
+					
+      <xs:element minOccurs="0" name="descricao" type="xs:string"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="saidaAtualizarProcesso">
+				
+    <xs:sequence>
+					
+      <xs:element minOccurs="0" name="statusExecucao" type="tns:statusExecucao"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="statusExecucao">
+				
+    <xs:sequence>
+					
+      <xs:element minOccurs="0" name="executadoCorretamente" type="xs:boolean"/>
+					
+      <xs:element minOccurs="0" name="mensagens" type="tns:mensagens"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="mensagens">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="mensagem" nillable="true" type="tns:mensagem"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="mensagem">
+				
+    <xs:sequence>
+					
+      <xs:element minOccurs="0" name="severidade" type="tns:severidadeEnum"/>
+					
+      <xs:element minOccurs="0" name="mensagem" type="xs:string"/>
+					
+      <xs:element minOccurs="0" name="detalhes" type="xs:string"/>
+					
+      <xs:element minOccurs="0" name="codigo" type="xs:int"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="entradaVerificarElegibilidade">
+				
+    <xs:sequence>
+					
+      <xs:element maxOccurs="1" minOccurs="1" name="identificacaoBeneficiario" type="tns:identificacaoBeneficiario"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:complexType name="saidaVerificarElegibilidade">
+				
+    <xs:sequence>
+					
+      <xs:element minOccurs="0" name="elegivel" type="xs:boolean"/>
+					
+      <xs:element minOccurs="0" name="versao" type="xs:int"/>
+					
+      <xs:element minOccurs="0" name="statusExecucao" type="tns:statusExecucao"/>
+				
+    </xs:sequence>
+			
+  </xs:complexType>
+			
+  <xs:simpleType name="severidadeEnum">
+				
+    <xs:restriction base="xs:string">
+					
+      <xs:enumeration value="WARN"/>
+					
+      <xs:enumeration value="INFO"/>
+					
+      <xs:enumeration value="FATAL"/>
+					
+      <xs:enumeration value="ERROR"/>
+				
+    </xs:restriction>
+			
+  </xs:simpleType>
+			
+  <xs:element name="atualizarProcessoRequest" nillable="true" type="tns:entradaAtualizarProcesso"/>
+			
+  <xs:element name="atualizarProcessoResponse" nillable="true" type="tns:saidaAtualizarProcesso"/>
+			
+  <xs:element name="verificarElegibilidadeRequest" nillable="true" type="tns:entradaVerificarElegibilidade"/>
+			
+  <xs:element name="verificarElegibilidadeResponse" nillable="true" type="tns:saidaVerificarElegibilidade"/>
+		
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="verificarElegibilidadeResponse">
+    <wsdl:part element="tns:verificarElegibilidadeResponse" name="verificarElegibilidadeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="atualizarProcesso">
+    <wsdl:part element="tns:atualizarProcessoRequest" name="atualizarProcessoRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verificarElegibilidade">
+    <wsdl:part element="tns:verificarElegibilidadeRequest" name="verificarElegibilidadeRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="atualizarProcessoResponse">
+    <wsdl:part element="tns:atualizarProcessoResponse" name="atualizarProcessoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="amuc">
+    <wsdl:operation name="atualizarProcesso">
+<wsdl:documentation>Atualiza dados de um processo AMUC na capesesp</wsdl:documentation>
+      <wsdl:input message="tns:atualizarProcesso" name="atualizarProcesso">
+    </wsdl:input>
+      <wsdl:output message="tns:atualizarProcessoResponse" name="atualizarProcessoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verificarElegibilidade">
+<wsdl:documentation>Verifica elegibilidade do beneficiario ao AMUC: valida se o mesmo possui direito ao beneficio, e em caso negativo informa o motivo do indeferimento.</wsdl:documentation>
+      <wsdl:input message="tns:verificarElegibilidade" name="verificarElegibilidade">
+    </wsdl:input>
+      <wsdl:output message="tns:verificarElegibilidadeResponse" name="verificarElegibilidadeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="servicesSoapBinding" type="tns:amuc">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="atualizarProcesso">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="atualizarProcesso">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="atualizarProcessoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verificarElegibilidade">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="verificarElegibilidade">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="verificarElegibilidadeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="services">
+    <wsdl:port binding="tns:servicesSoapBinding" name="amucPort">
+      <soap:address location="http://localhost:8080/capesesp-ws/services/amuc"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<a href="https://github.com/robotdance/jsf-wsdl-viewer" class="fork">
+		<h:graphicImage value="/fork.png" />
+	</a>
+	<div class="jumbotron">
+		<div class="container-fluid">
+			<h:form>
+				<f:view locale="#{localeSwitcher.locale}">
+	    			<h:commandLink value="#{app.english}" action="#{localeSwitcher.change('en', null)}" /> - <h:commandLink value="#{app.portuguese}" action="#{localeSwitcher.change('pt', 'BR')}" />
+				</f:view>	
+			</h:form>
+			<h1>#{app.title}<span class="glyphicon glyphicon-cloud"></span></h1>
+			<p>#{app.heading}</p>
+		</div>
+	</div>
+</ui:composition>

@@ -1,0 +1,789 @@
+/**
+ * Sidebar
+ */
+.sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding: 10px 0 10px 20px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    margin: 10px;
+    width: 350px;
+}
+
+.slider {
+    width: 100% !important;
+}
+
+code {
+    font-family: Monospace, Courier;
+    color: gray;
+    background-color: #f4f2f9;
+    font-size: 75%;
+}
+
+.restriction {
+	display: inline;
+}
+
+/**
+ * Body
+ */
+body {
+	color: #333;
+	margin: 0;
+	padding: 0;
+	height: auto;
+	background-color: rgb(254, 254, 254);
+	font-family: Lato, Arial, Verdana;
+	font-size: 16px;
+}
+
+#outer_box {
+	padding: 3px 3px 3px 194px;
+}
+
+#inner_box {
+	width: auto;
+}
+
+/**
+ * Fixed box with links
+ */
+#outer_links {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	margin: 3px;
+	padding: 1px;
+	z-index: 200;
+	width: 180px;
+	height: auto;
+	padding-top: 2px;
+	border: 1px solid navy;
+}
+
+* html #outer_links /* Override above rule for IE */ {
+	position: absolute;
+	width: 188px;
+	top: expression(offsetParent.scrollTop +     0);
+}
+
+#links {
+	margin: 1px;
+	padding: 3px;
+	height: 350px;
+	overflow: auto;
+	border: 1px solid navy;
+}
+
+#links ul {
+	left: -999em;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	z-index: 100;
+}
+
+#links li {
+	margin: 0;
+	padding: 2px 4px;
+	width: auto;
+	z-index: 100;
+}
+
+#links ul li {
+	margin: 0;
+	padding: 2px 4px;
+	width: auto;
+	z-index: 100;
+}
+
+#links a {
+	display: block;
+	padding: 0 2px;
+	color: #176781;
+	width: auto;
+	border: 1px solid white;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+#links a:hover {
+	color: #176781;
+	background-color: gray;
+	border: 1px solid gray;
+}
+
+/**
+
+	Navigation tabs
+
+*/
+#outer_nav {
+	background-color: yellow;
+	padding: 0;
+	margin: 0;
+}
+
+#nav {
+	height: 100%;
+	width: auto;
+	margin: 0;
+	padding: 0;
+	/*background-color: gainsboro;*/
+	border-top: 1px solid gray;
+	border-bottom: 3px solid gray;
+	z-index: 100;
+	font: bold 90%/120%;
+	letter-spacing: 2px;
+}
+
+#nav ul { /*background-color: gainsboro;*/
+	height: auto;
+	width: auto;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	z-index: 100;
+	border: 1px solid silver;
+	border-top-color: black;
+	border-width: 1px 0 9px;
+}
+
+#nav li {
+	display: inline;
+	padding: 0;
+	margin: 0;
+}
+
+#nav a {
+	position: relative;
+	top: 3px;
+	float: left;
+	width: auto;
+	padding: 8px 10px 6px 10px;
+	margin: 3px 3px 0;
+	border: 1px solid gray;
+	border-width: 2px 2px 3px 2px;
+	color: black;
+	background-color: silver;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+#nav a:hover {
+	margin-top: 1px;
+	padding-top: 9px;
+	padding-bottom: 7px;
+	color: blue;
+	/*background-color: gainsboro;*/
+}
+
+#nav a.current:link,#nav a.current:visited,#nav a.current:hover {
+	background: white;
+	color: black;
+	text-shadow: none;
+	margin-top: 0;
+	padding-top: 11px;
+	padding-bottom: 9px;
+	border-bottom-width: 0;
+	border-color: red;
+}
+
+#nav a:active {
+	background-color: silver;
+	color: white;
+}
+
+/**
+
+	Content
+
+*/
+#header {
+	margin: 0;
+	padding: 1em 0;
+}
+
+#header h1 {
+	margin-top: 0;
+}
+
+#header div {
+	margin-left: 10px;
+}
+
+#content {
+	margin: 0;
+	padding: 0 2em .5em;
+}
+
+#footer {
+	clear: both;
+	margin: 0;
+	padding: .5em 2em;
+	color: gray;
+	font-size: 80%;
+	text-align: right
+}
+
+.single_column {
+	padding: 10px 10px 10px 10px;
+	/*margin: 0px 33% 0px 0px; */
+	margin: 3px 0;
+}
+
+#flexi_column {
+	padding: 10px 10px 10px 10px;
+	/*margin: 0px 33% 0px 0px; */
+	margin: 0px 212px 0px 0px;
+}
+
+#fix_column {
+	float: right;
+	padding: 10px 10px 10px 10px;
+	margin: 0px;
+	width: 205px;
+	/*width: 30%; */
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	/* width: 30%; */
+	width: 205px;
+}
+
+html  &gt ;body #rightColumn {
+	width: 205px; /* ie5win fudge ends */
+} /* Opera5.02 shows a 2px gap between. N6.01Win sometimes does.
+	Depends on amount of fill and window size and wind direction. */
+
+/**
+
+	Label / value
+
+*/
+.page {
+	border-bottom: 1px solid gray;
+	border-radius: 10px;
+	margin: 0;
+	padding: 10px 0 20px 0;
+}
+
+.value,.lbl {
+	margin: 0;
+	padding: 0;
+}
+
+.lbl {
+	float: left;
+	width: 140px;
+	text-align: right;
+	padding-bottom: 0;
+	margin-right: 0.5em;
+	color: rgb(128, 128, 128);
+}
+
+.value {
+	margin-left: 160px;
+	padding-bottom: 2px;
+}
+
+strong, strong a {
+	color: darkblue;
+	font-weight: bold;
+	letter-spacing: 1px;
+	margin-left: 2px;
+}
+
+/**
+
+	Links
+
+*/
+a.local:link,a.local:visited {
+	margin-left: 6px;
+}
+
+a.target:link,a.target:visited,a.target:hover {
+	text-decoration: none;
+	background-color: transparent;
+	border-bottom-type: none;
+}
+
+/**
+
+	Box, Shadow
+
+*/
+.box {
+	background-color: none;
+}
+
+.shadow {
+	background: silver;
+	position: relative;
+	top: 5px;
+	left: 4px;
+}
+
+.shadow div {
+	position: relative;
+	top: -5px;
+	left: -4px;
+}
+
+/**
+
+	Floatcontainer
+
+*/
+.spacer {
+	display: block;
+	height: 0;
+	font-size: 0;
+	line-height: 0;
+	margin: 0;
+	padding: 0;
+	border-style: none;
+	clear: both;
+	visibility: hidden;
+}
+
+.floatcontainer:after {
+	content: ".";
+	display: block;
+	height: 0;
+	font-size: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.floatcontainer {
+	display: inline-table;
+} /* Mark Hadley's fix for IE Mac */ /* Hides from IE Mac \*/
+* 
+html .floatcontainer {
+	height: 1%;
+}
+
+.floatcontainer {
+	display: block;
+} /* End Hack 
+*/
+
+/**
+
+	Source code
+
+*/
+.indent {
+	margin: 2px 0 2px 20px;
+}
+
+.xml-element,.xml-proc,.xml-comment {
+	margin: 2px 0;
+	padding: 2px 0 2px 0;
+}
+
+.xml-element {
+	word-spacing: 3px;
+	color: gray;
+	font-weight: bold;
+	font-style: normal;
+	border-left: 1px dotted silver;
+}
+
+.xml-element div {
+	margin: 2px 0 2px 40px;
+}
+
+.xml-att {
+	color: #7F1616;
+}
+
+.xml-att-val {
+	color: #666;
+	font-weight: normal;
+}
+
+.xml-proc {
+	color: #7F1616;
+	font-weight: normal;
+	font-style: italic;
+}
+
+.xml-comment {
+	color: #3c763d;
+	font-weight: normal;
+	font-style: italic;
+}
+
+.xml-text {
+	color: #3c763d;
+	font-weight: normal;
+	font-style: normal;
+}
+
+/**
+
+	Heading
+
+*/
+
+/**
+
+	Content formatting
+
+*/
+.port {
+	border-bottom: 1px dashed gray;
+}
+
+.operation {
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 1px dashed gray;
+}
+
+/* --------------------------------------------------------
+	Printing
+*/
+
+/*
+@media print
+{
+	#outer_links, #outer_nav { 
+		display: none;
+	}
+*/
+#outer_box {
+	padding: 3px;
+}
+/* END print media definition
+}
+*/
+
+/* additional styling */
+.small {
+	color: #333;
+}
+
+.small big {
+	color: #F07305; /* #FC7A06;*/
+}
+
+ol {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 0;
+	padding-left: 16px;
+}
+
+.messagePart {
+	display: box;
+	list-style-type: none;
+	border-left: 1px dotted #C0C0C0;
+	padding-left: 30px;
+	margin-left: 0;
+}
+
+.source {
+	font-family: "Courier new", "Bitstream Vera Sans Mono", "Andale mono",
+		"Lucida console";
+	font-size: 9pt;
+}
+
+.urlInput {
+	width: 100%;
+}
+
+.searchBox {
+	width:1200px;
+	/*
+	border:1px solid gray; 
+	border-radius:1em;
+	*/ 
+	margin:2em; 
+	padding:1em; 
+	margin-left: auto; 
+	margin-right: auto;	
+}
+
+.searchField {
+	white-space: nowrap; margin-top:1em;
+}
+
+.invisivel {
+	display: none;
+	visibility: hidden;
+}
+
+.visivel {
+	display: box;
+	visibility: visible;
+}
+
+.messagePart li a{
+	text-decoration: none;
+}
+
+.messagePart a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+ul.messagePart > li.fechado > a {
+	background: url(./bullet_normal.png) 0 3px no-repeat;
+	padding-left: 10px;
+}
+
+ul.messagePart > li.aberto > a {
+	background: url(./bullet_expanded.png) 0 6px no-repeat;
+	padding-left: 10px;
+}
+
+li.fechado ul.messagePart {
+	display: none;
+	visibility: hidden;
+}
+
+li.aberto ul.messagePart {
+	display: box;
+	visibility: visible;
+}
+
+
+.beta {
+	font-size: small;
+	text-decoration: italic;
+}
+
+.servico {
+	
+}
+
+.listaServicos li {
+	margin-bottom: 1em;
+}
+
+.wsdocObs {
+	margin-top: 2em;
+}
+
+.documentation {
+	font-size: 0.9em;
+	padding-left: 9px; /* 6px */
+	border-left: 1px dotted #C0C0C0;
+	color: #444;
+}
+
+.documentation-arrow,
+.documentation-content {
+	display: inline-table;
+	/*padding: 0 0 4px 8px;*/
+}
+
+.documentation-arrow img {
+	vertical-align: top;
+}
+
+.documentation-content {
+	/**/
+}
+
+.operations > li {
+	line-height: 26px;
+}
+
+.element-type-container {
+	display: inline;
+}
+
+.element-type-container span[class*='text'] {
+	margin-right: 2px;
+	margin-left: 2px;
+	font-weight: normal;
+}
+
+.element-type {
+	display: inline;
+}
+
+.element-type .word {
+ 	font-size: small;
+ 	color: gray;
+}
+
+.element-type .type {
+	color: #7F1616;
+}
+
+.element-type-default-word {
+	display: inline;
+}
+
+.element-type-default {
+	display: inline;
+}
+
+.operation-name-brief {
+	display: inline;
+	color: #7F1616;
+}
+
+.operation-name {
+	color: #7F1616;
+}
+
+ul {
+	padding-left: 0;
+}
+
+span.required {
+	border-bottom: 1px dashed #3c763d;
+}
+
+.jumbotron {
+	background-color: #286090;
+	color: white;
+	margin: 0;
+}
+
+.jumbotron a,
+.jumbotron a:hover,
+.jumbotron a:link,
+.jumbotron a:visited {
+	color: white;
+}
+
+.validation-message {
+    margin-top: 8px;
+    font-size: .9em;
+}
+
+.error {
+	color: darkred;
+}
+
+a.fork {
+  position:absolute;
+  text-align: right;
+  top: 0;
+  right: 0;	
+}
+
+a.fork img {
+	width: 75%;
+	height: 75%;
+}
+
+@media (max-width: 768px) {
+	
+	#header {
+		padding: 0;
+	}
+	
+	.sidebar {
+	    position: inherit;
+	    padding: 5px 0 5px 5px;
+	    margin: 10px;
+	    width: 300px;
+	    font-size: 80%;
+	    margin-bottom: 0;
+	}	
+	
+	.jumbotron {
+		padding-top: 15px;
+		padding-bottom: 15px;
+		margin-bottom: 15px;
+	}
+	
+	.jumbotron h1 {
+		margin-top: 0;
+	}
+	
+	.lbl {
+		float: none;
+		width: auto;
+		text-align: left;
+	}
+
+	.value {
+	    margin-left: 0;
+	}
+	
+}
+
+@media (min-width: 769px) {
+	a.fork img {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+@media print {
+	body {
+	  margin: 0;
+	  font-size: 8pt;
+	}
+	
+	h1 {
+		font-size: 18pt;
+	}
+	
+	h2 {
+		font-size: 16pt;
+	}
+
+	h3 {
+		font-size: 14pt;
+		margin-top: 4pt;
+	}
+	
+	#content {
+		margin: 0;
+		padding: 0;
+	}
+	
+	.page {
+		padding: 0;
+	}
+	
+	div.page .indent {
+		margin: 0;
+	}
+	
+	h3 small, a.local, .js, div#header a {
+		display: none;
+	}
+	
+	li.fechado ul.messagePart {
+	    display: inherit;
+	    visibility: visible;
+	}
+
+	.sidebar {
+		display: none;
+	}
+	
+	.jumbotron {
+		display:none;
+	}
+
+	#header {
+	    background-color: #176781;
+	    border-radius: 10px 10px 10px 10px;
+	    color: #FFFFFF;
+	    margin: 0;
+	    padding: 0.5em;
+	}
+}
+
+@page  
+{ 
+    size: auto;   /* auto is the initial value */ 
+    /* this affects the margin in the printer settings */ 
+    margin: 10mm 5mm 10mm 5mm;  
+} 

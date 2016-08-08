@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	lang="#{facesContext.viewRoot.locale.language}"
+	>
+
+	<h:head>
+		<ui:include src="/head-content.xhtml" />
+	</h:head>
+	
+	<h:body>
+		<ui:include src="/jumbotron.xhtml" />
+		
+		<div class="container-fluid">
+			<ui:include src="about_#{localeSwitcher.locale}.xhtml"/>
+			
+			<div class="row">
+				<div class="col-xs-12 col-sm-4">
+					<h2>#{app.type_url}</h2>
+					<p>#{app.type_url_description}</p>
+					<h:form class="form-inline" id="wsdl">
+						<div class="form-group">
+							<label class="sr-only" for="service">#{app.wsdl}</label>
+							<h:inputText id="url" name="bob" value="#{wsdlBean.wsdlUrl}" class="col-xs-8" placeholder="#{app.type_url}" required="true" />
+							&#160;<h:commandButton value="#{app.submit}" class="btn btn-primary" action="#{wsdlBean.typeWsdl}" />
+						</div>
+						<p class="validation-message">
+							<h:message 
+								for 		= "url" 
+								rendered 	= "true"
+								errorClass 	= "error"
+								fatalClass 	= "fatal"
+								infoClass 	= "info"
+								warnClass 	= "warn"
+								/>
+						</p>
+					</h:form>
+				</div>
+
+				<div class="col-xs-12 col-sm-4">
+					<h2>#{app.upload_wsdl}</h2>
+					<p>#{app.upload_wsdl_description}</p>
+					<h:form id="upload" method="post" enctype="multipart/form-data" class="form-inline">
+						<div class="form-group">
+							<div class="fileupload fileupload-new" data-provides="fileupload">
+								<span class="btn btn-default btn-file">
+									<span class="fileupload-new">#{app.select_file}</span>
+									<span class="fileupload-exists">#{app.change}</span>
+									<h:inputFile id="file" value="#{wsdlBean.file}"/>
+								</span>
+								<span class="fileupload-preview"></span>
+								<a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+							</div>&#160;<h:commandButton value="#{app.submit}" class="btn btn-primary" action="#{wsdlBean.upload}" />
+							<p class="validation-message">
+								<h:message 
+									for 		= "file" 
+									rendered 	= "true"
+									errorClass 	= "error"
+									fatalClass 	= "fatal"
+									infoClass 	= "info"
+									warnClass 	= "warn"
+									/>
+							</p>
+						</div>
+					</h:form>
+				</div>
+
+				<div class="col-xs-12 col-sm-4">
+					<h2>#{app.examples}</h2>
+					<p>#{app.examples_description}</p>
+					<table class="table">
+						<tr>
+							<td class="col-xs-12">
+								<h:form>
+									<input type="hidden" id="exampleName" name="exampleName" value="/example_1.wsdl"/>
+									<h:commandLink action="#{wsdlBean.example}" value="#{app.example} 1" />	
+								</h:form>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<h:form>
+									<input type="hidden" id="exampleName" name="exampleName" value="/example_2.wsdl"/>
+									<h:commandLink action="#{wsdlBean.example}" value="#{app.example} 2" />	
+								</h:form>
+							</td>
+						</tr>
+					</table>	
+				</div>
+			</div>
+			
+		</div>
+	</h:body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	lang="#{facesContext.viewRoot.locale.language}"
+	>
+
+	<h:head>
+		<ui:include src="/head-content.xhtml" />
+	</h:head>
+	
+	<h:body>
+		<div id="sidebar" class="sidebar">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-8 detail-level">#{app.detail_level}</div>
+					<div class="col-xs-4 hierarchy">#{app.hierarchy}</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-8">
+						<input id="detail-slider"
+						      type="text"
+					          data-provide="slider"
+					          data-slider-ticks="[0, 1, 2, 3, 4, 5, 6]"
+					          data-slider-min="0"
+					          data-slider-max="4"
+					          data-slider-step="1"
+					          data-slider-value="1"
+					          data-slider-tooltip="hide" />
+					</div>
+					<div class="col-xs-4">
+						<div class="btn-group">
+							<a href="#" class="btn btn-default btn-sm" onclick="collapseAll(); return false;"><span class="glyphicon glyphicon-minus"></span></a>
+							<a href="#" class="btn btn-default btn-sm" onclick="expandAll(); return false;"><span class="glyphicon glyphicon-plus"></span></a>
+						</div>
+					</div>
+				</div>
+		    </div>		
+		</div>
+		<h:outputText value="#{wsdlBean.transformedWsdl}" escape="false"/>
+	</h:body>
+</html>

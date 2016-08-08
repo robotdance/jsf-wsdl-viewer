@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:tns="http://www.capesesp.com.br/ws/cadastro"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	name="services" targetNamespace="http://www.capesesp.com.br/ws/cadastro">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://www.capesesp.com.br/ws/cadastro"
+			attributeFormDefault="unqualified" elementFormDefault="unqualified"
+			targetNamespace="http://www.capesesp.com.br/ws/cadastro">
+			<!-- Lembretes: 
+			    1) Atributo minOcurrs quando omitido possui valor padrão 1 
+			    2) Atributo maxOcurrs quando omitido possui valor padrão 1
+			-->
+			<xs:complexType name="entradaEncontraPessoa">
+				<xsd:annotation>
+					<xsd:documentation>Dados de requisição</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="identificacaoPessoa" type="tns:identificacaoPessoa" />
+					<xs:element minOccurs="0" name="configuradorRetorno" type="tns:configuradorRetorno" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="identificacaoPessoa">
+				<xsd:annotation>
+					<xsd:documentation>Identificação única da pessoa a ser procurada.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="matriculas" type="tns:matriculas" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="matriculas">
+				<xsd:annotation>
+					<xsd:documentation>Matrículas da pessoa, de acordo com o sistema de origem.</xsd:documentation>
+				</xsd:annotation>
+				<xs:choice>
+					<xs:element name="matriculaSistemaCentral" type="tns:matriculaSistemaCentral" />
+					<xs:element name="matriculaProtheus" type="tns:matriculaProtheus" />
+					<xs:element name="matriculaTotalPrev" type="tns:matriculaTotalPrev" />
+				</xs:choice>
+			</xs:complexType>
+			<xs:complexType name="matriculaSistemaCentral">
+				<xsd:annotation>
+					<xsd:documentation>Matricula da pessoa no Sistema Central (Opus/Openbase).</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="numero" type="xs:string" />
+					<xs:element name="sequencial" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="matriculaProtheus">
+				<xsd:annotation>
+					<xsd:documentation>Matrícula da pessoa no Protheus-PLS (ADVPL)</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="numero" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="matriculaTotalPrev">
+				<xsd:annotation>
+					<xsd:documentation>Matrícula da pessoa no TotalPrev (Delphi)</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="numero" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="configuradorRetorno">
+				<xsd:annotation>
+					<xsd:documentation>Permite configurar quais elementos retornam no resultado de uma requisição</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="configuradorDadosPessoais" type="tns:configuradorDadosPessoais" />
+					<xs:element minOccurs="0" name="configuradorDadosFuncionais" type="tns:configuradorDadosFuncionais" />
+					<xs:element minOccurs="0" name="configuradorDadosFinanceiros" type="tns:configuradorDadosFinanceiros" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="configuradorDadosPessoais">
+				<xsd:annotation>
+					<xsd:documentation>Configura dados pessoais na resposta à requisição.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="incluirDadosPessoais" type="xs:boolean" default="true">
+						<xsd:annotation>
+							<xsd:documentation>Se verdadeiro inclui dados pessoais na resposta.</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="configuradorDadosFuncionais">
+				<xsd:annotation>
+					<xsd:documentation>Configura dados funcionais na resposta à requisição.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="incluirDadosFuncionais" type="xs:boolean" default="false">
+						<xsd:annotation>
+							<xsd:documentation>Se verdadeiro inclui dados funcionais na resposta.</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="configuradorDadosFinanceiros">
+				<xsd:annotation>
+					<xsd:documentation>Configura dados financeiros na resposta à requisição.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="incluirDadosFinanceiros" type="xs:boolean" default="false">
+						<xsd:annotation>
+							<xsd:documentation>Se verdadeiro inclui dados financeiros na resposta.</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="saidaEncontraPessoa">
+				<xsd:annotation>
+					<xsd:documentation>Dados de resposta à requisição.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="pessoa" type="tns:pessoa" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="pessoas">
+				<xsd:annotation>
+					<xsd:documentation>Conjunto de pessoas.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="pessoa" type="tns:pessoa" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="pessoa">
+				<xsd:annotation>
+					<xsd:documentation>Representa uma pessoa no cadastro.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="dataAtualizacao" type="xs:dateTime" />
+					<xs:element minOccurs="0" name="dadosPessoais" type="tns:dadosPessoais" />
+					<xs:element minOccurs="0" name="dadosFuncionais" type="tns:dadosFuncionais" />
+					<xs:element minOccurs="0" name="dadosBancarios" type="tns:dadosBancarios" />
+					<xs:element minOccurs="0" name="dadosPrevidenciais" type="tns:dadosPrevidenciais" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="dadosPessoais">
+				<xs:sequence>
+					<xs:element name="nomeCompleto" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Todos os elementos de um nome concatenados por espaço em branco</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="nomeMae" type="xs:string" >
+						<xsd:annotation>
+							<xsd:documentation>Nome da mãe para diferenciar <a href="https://pt.wikipedia.org/wiki/Hom%C3%B3nimo">homônimos</a></xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="nomePai" type="xs:string" >
+						<xsd:annotation>
+							<xsd:documentation>Nome do pai para diferenciar <a href="https://pt.wikipedia.org/wiki/Hom%C3%B3nimo">homônimos</a></xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="dataNascimento" type="xs:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>Data de nascimento no <a href="https://en.wikipedia.org/wiki/ISO_8601">formato padrão</a></xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="dataObito" type="xs:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>Data de óbito no <a href="https://en.wikipedia.org/wiki/ISO_8601">formato padrão</a></xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="sexo" type="tns:sexoEnum"></xs:element>
+					<xs:element minOccurs="0" name="estadoCivil" type="tns:estadoCivilEnum"></xs:element>
+					<xs:element minOccurs="0" name="documentos" type="tns:documentos"/>
+					<xs:element minOccurs="0" name="enderecos" type="tns:enderecos" />
+					<xs:element minOccurs="0" name="telefones" type="tns:telefones" />
+					<xs:element minOccurs="0" name="nacionalidade" type="tns:nacionalidade" />
+					<xs:element minOccurs="0" name="tipoSanguineo" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Descrição do tipo sanguíneo</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="ocupacao" type="tns:ocupacao" />
+					<xs:element minOccurs="0" name="email" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="documentos">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="documento" type="tns:documento" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="documento">
+				<xsd:annotation>
+					<xsd:documentation>
+						Representa um documento, determinado pelo seu tipo e campos como número, dígito verificador, etc.<br/>
+						Determinados tipos de documento não possuem todos os elementos (dígito verificador e série, por exemplo).<br/>
+						A validação de um documento depende da implementação do serviço e não do esquema.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="numero" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Número principal do documento</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="dv" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Dígito(s) verificador(es). Ocorre por exemplo em CPF e CNPJ</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="serie" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Campo 'série' existente em documentos como CTPS</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="orgaoEmissor" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Órgao emissor (SSP, Detran, etc.)</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="dataExpedicao" type="xs:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>Data quando o documento foi emitido.</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="tipoDocumento" type="tns:tipoDocumentoEnum" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="enderecos">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="endereco" type="tns:endereco" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="endereco">
+				<xsd:annotation>
+					<xsd:documentation>Representa um endereço no cadastro</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="cep" type="tns:cep" />
+					<xs:element name="logradouro" type="xs:string" />
+					<xs:element minOccurs="0" name="numero" type="xs:string" />
+					<xs:element minOccurs="0" name="complemento" type="xs:string" />
+					<xs:element minOccurs="0" name="bairro" type="xs:string" />
+					<xs:element name="cidade" type="tns:cidade" />
+					<xs:element minOccurs="0" name="tipoEndereco" type="tns:tipoEnderecoEnum">
+						<xsd:annotation>
+							<xsd:documentation>
+							Tipo do endereço
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="Uf" type="tns:ufEnum" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="cep">
+				<xsd:annotation>
+					<xsd:documentation>Código de endereçamento postal brasileiro</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="numero" type="xs:positiveInteger">
+						<xsd:annotation>
+							<xsd:documentation>Somente os dígitos do CEP</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="formatado" minOccurs="0" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>CEP formatado para NNNNN-NNN Expressão regular: <code>^[0-9]{5}-[0-9]{3}$</code></xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="cidade">
+				<xsd:annotation>
+					<xsd:documentation>Representa uma cidade brasileira</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="codigoMunicipioIbge" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Código do município no <a href="www.ibge.gov.br">IBGE</a></xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="nome" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Nome do município</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="telefones">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="telefone" type="tns:telefone" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="telefone">
+				<xsd:annotation>
+					<xsd:documentation>Representa um contato telefônico</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="ddd" type="xs:positiveInteger">
+						<xsd:annotation>
+							<xsd:documentation><a href="https://pt.wikipedia.org/wiki/Discagem_direta_a_dist%C3%A2ncia">DDD</a> do telefone</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="numero" type="xs:positiveInteger">
+						<xsd:annotation>
+							<xsd:documentation>Número do telefone (somente dígitos)</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="tipos" type="tns:tiposTelefone"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="tiposTelefone">
+				<xsd:annotation>
+					<xsd:documentation>
+					Conjunto de tipos de telefone. <br/>
+					Um telefone pode possuir mais de um tipo, exemplo: residencial e trabalho para o mesmo número.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="tipo" type="tns:tipoTelefoneEnum" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="nacionalidade">
+				<xsd:annotation>
+					<xsd:documentation>Representa nacionalidade com código do pais e nome do país</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="codigo" type="xs:int" />
+					<xs:element name="pais" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ocupacao">
+				<xsd:annotation>
+					<xsd:documentation>Representa classificação brasileira de ocupação (CBO)</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="cbo1994" type="xs:string" />
+					<xs:element minOccurs="0" name="cbo2002" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="dadosFuncionais">
+				<xsd:annotation>
+					<xsd:documentation>Dados funcionais provenientes do arquivo <a href="http://www.siapenet.gov.br/oque.htm">SIAPEnet</a></xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="unidadePagadora" type="tns:unidadePagadora" />
+					<xs:element minOccurs="0" name="tipoAssociado" type="tns:tipoAssociadoEnum" />
+					<xs:element minOccurs="0" name="qualificacao" type="tns:qualificacaoEnum" />
+					<xs:element minOccurs="0" name="matriculaSiape" type="tns:matriculaSiape" />
+					<xs:element minOccurs="0" name="orgao" type="tns:orgao" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="unidadePagadora">
+				<xs:sequence>
+					<xs:element name="codigo" type="xs:string" />
+					<xs:element name="siglaUF" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="matriculaSiape">
+				<xs:sequence>
+					<xs:element name="numero" type="xs:int" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="orgao">
+				<xs:sequence>
+					<xs:element name="codigo" type="xs:string" />
+					<xs:element name="nome" type="xs:string" />
+					<xs:element name="cnpj" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="dadosBancarios">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="dadoBancario" type="tns:dadoBancario" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="dadoBancario">
+				<xsd:annotation>
+					<xsd:documentation>Representa um contato bancário para operações financeiras.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="banco" type="tns:banco" />
+					<xs:element name="agencia" type="tns:agencia" />
+					<xs:element name="conta" type="tns:contaCorrente" />
+					<xs:element name="tipoDadoBancario" type="tns:tipoDadoBancarioEnum" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="banco">
+				<xs:sequence>
+					<xs:element name="codigo" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Código do banco na <a href="http://www.febraban.org.br/arquivo/bancos/sitebancos2-0.asp">FEBRABAN</a></xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="nome" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>Nome do banco</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="agencia">
+				<xsd:annotation>
+					<xsd:documentation>Representa agência bancária</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="codigo" type="xs:string" />
+					<xs:element name="dv" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="contaCorrente">
+				<xsd:annotation>
+					<xsd:documentation>Representa conta corrente</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="numero" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="dadosPrevidenciais">
+				<xsd:annotation>
+					<xsd:documentation>Dados previdenciais provenientes do arquivo <a href="http://www.siapenet.gov.br/oque.htm">SIAPEnet</a></xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="baseSalarialPrevidencia" type="xs:double" />
+					<xs:element minOccurs="0" name="dataInscricao" type="xs:dateTime" />
+					<xs:element minOccurs="0" name="dataCancelamento" type="xs:dateTime" />
+					<xs:element minOccurs="0" name="dataInscricaoPeculio" type="xs:dateTime" />
+					<xs:element minOccurs="0" name="dataCancelamentoPeculio" type="xs:dateTime" />
+					<xs:element minOccurs="0" name="numeroInscricaoPrevidencia"	type="xs:integer" />
+					<xs:element minOccurs="0" name="numeroInscricaoPeculio" type="xs:integer" />
+					<xs:element minOccurs="0" name="codigoBeneficio" type="xs:int" />
+					<xs:element minOccurs="0" name="situacaoBenefício" type="xs:int" />
+					<xs:element minOccurs="0" name="tiposPeculio" type="tns:tipoPeculioEnum" />
+					<xs:element minOccurs="0" name="condicaoPeculio" type="tns:condicaoPeculioEnum" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="entradaRegistraObservador">
+				<xs:sequence>
+					<xs:element name="login" type="tns:login" />
+					<xs:element name="observador" type="tns:observador" />
+					<xs:element minOccurs="0" name="configuradorRetorno" type="tns:configuradorRetorno" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="observador">
+				<xsd:annotation>
+					<xsd:documentation>Representa um observador de eventos que podem ser disparados pelo web service de cadastro.</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="url" type="xs:string" />
+					<xs:element name="tipoEvento" type="tns:tipoEventoEnum" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="login">
+				<xsd:annotation>
+					<xsd:documentation>Dados de autenticação</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="usuario" type="xs:string" />
+					<xs:element name="senha" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="saidaRegistraObservador">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="eventoExemplo" type="tns:evento">
+					</xs:element>
+					<xs:element name="statusExecucao" type="tns:statusExecucao" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="evento">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa um evento disparado pelo web service de cadastro.<br/>
+					O disparo de eventos segue o padrão <a href="https://en.wikipedia.org/wiki/Webhook">webhook</a><br/>
+					O sucesso de recebimento do evento deve ser obtido pelo retorno de <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">códigos HTTP</a> 2* (200, 201, 202, etc.) <br/>
+					Qualquer outro código de retorno significa re-envio: até 10 (dez) novas tentativas serão feitas com intervalos aleatoriamente crescentes. <br/>
+					Após 10 tentativas sem sucesso, o envio é cancelado.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger">
+						<xsd:annotation>
+							<xsd:documentation>
+							Identificador do evento para este web service
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="tipoEvento" type="tns:tipoEventoEnum">
+						<xsd:annotation>
+							<xsd:documentation>
+							Tipo do evento disparado
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="pessoa" type="tns:pessoa" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="statusExecucao">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa dados associados à execução de um método do serviço e seus possíveis retornos.<br/>
+					O disparo de eventos segue o padrão <a href="https://en.wikipedia.org/wiki/Webhook">webhook</a>
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="executadoCorretamente" type="xs:boolean">
+						<xsd:annotation>
+							<xsd:documentation>
+					          Indica se o método executou sem erros ou exceções internas.<br/>
+					          Não confundir "executado corretamente" com "invocado corretamente":<br/>
+					          <ul>
+						          <li>executado corretamente: mérito interno ao serviço</li>
+						          <li>invocado corretamente: mérito externo ao serviço</li>
+							  </ul>
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="mensagens" type="tns:mensagens" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="mensagens">
+				<xsd:annotation>
+					<xsd:documentation>
+					Conjunto de mensagens de retorno.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="mensagem" type="tns:mensagem" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="mensagem">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa uma mensagem de retorno.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:sequence>
+					<xs:element name="severidade" type="tns:severidadeEnum" />
+					<xs:element name="mensagem" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>
+							Texto resumido da mensagem (recomendável 60 a 80 caracteres)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="detalhes" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>
+							Mensagem detalhada (quando aplicável)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="codigo" type="xs:int">
+						<xsd:annotation>
+							<xsd:documentation>
+							Código de erro associado à mensagem
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="entradaPesquisaPessoa">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="dataAtualizacao" type="xs:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>
+							Pesquisa por data de atualização. Serão retornados todos as pessoas com data/hora de atualização igual ou superior ao informado.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="nome" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>
+							Pesquisa por nome, buscando ocorrências a partir do início do texto.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="matriculas" type="tns:matriculas">
+						<xsd:annotation>
+							<xsd:documentation>
+							Busca por uma das matrículas informadas.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="configuradorRetorno" type="tns:configuradorRetorno" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="saidaPesquisaPessoa">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="pessoas" type="tns:pessoas" />
+					<xs:element name="statusExecucao" type="tns:statusExecucao" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="sexoEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa sexo
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="MASCULINO" />
+					<xs:enumeration value="FEMININO" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="estadoCivilEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa estado civil
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CASADO" />
+					<xs:enumeration value="SOLTEIRO" />
+					<xs:enumeration value="DIVORCIADO" />
+					<xs:enumeration value="MARITAL" />
+					<xs:enumeration value="DESQUITADO" />
+					<xs:enumeration value="VIUVO" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="tipoDocumentoEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa tipo de documento
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="IDENTIDADE" />
+					<xs:enumeration value="CPF" />
+					<xs:enumeration value="CR" />
+					<xs:enumeration value="CNPJ" />
+					<xs:enumeration value="PIS" />
+					<xs:enumeration value="CNS" />
+					<xs:enumeration value="DNV" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="tipoEnderecoEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Tipo do endereço
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="RESIDENCIAL" />
+					<xs:enumeration value="COMERCIAL" />
+					<xs:enumeration value="COBRANCA" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ufEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa Unidade Federativa (estado) Brasileira
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="AC" />
+					<xs:enumeration value="AL" />
+					<xs:enumeration value="AM" />
+					<xs:enumeration value="AP" />
+					<xs:enumeration value="BA" />
+					<xs:enumeration value="CE" />
+					<xs:enumeration value="DF" />
+					<xs:enumeration value="ES" />
+					<xs:enumeration value="GO" />
+					<xs:enumeration value="MA" />
+					<xs:enumeration value="MG" />
+					<xs:enumeration value="MS" />
+					<xs:enumeration value="MT" />
+					<xs:enumeration value="PA" />
+					<xs:enumeration value="PB" />
+					<xs:enumeration value="PE" />
+					<xs:enumeration value="PI" />
+					<xs:enumeration value="PR" />
+					<xs:enumeration value="RJ" />
+					<xs:enumeration value="RN" />
+					<xs:enumeration value="RO" />
+					<xs:enumeration value="RR" />
+					<xs:enumeration value="RS" />
+					<xs:enumeration value="SC" />
+					<xs:enumeration value="SE" />
+					<xs:enumeration value="SP" />
+					<xs:enumeration value="TO" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="tipoTelefoneEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa tipo de telefone
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CELULAR" />
+					<xs:enumeration value="COMERCIAL" />
+					<xs:enumeration value="FAX" />
+					<xs:enumeration value="PARTICULAR" />
+					<xs:enumeration value="RECADO" />
+					<xs:enumeration value="RESIDENCIAL" />
+					<xs:enumeration value="SMS" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="tipoAssociadoEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa tipo de associação da pessoa
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="TITULAR" />
+					<xs:enumeration value="DEPENDENTE" />
+					<xs:enumeration value="DEPENDENTE_AGREGADO" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="qualificacaoEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Qualificação da pessoa (SIAPEnet)
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PENSIONISTA" />
+					<xs:enumeration value="SERVIDOR" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="tipoDadoBancarioEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CONTA_CORRENTE_SIAPE" />
+					<xs:enumeration value="CONTA_CORRENTE_PAGAMENTO" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="tipoPeculioEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa tipo de peculio:<br/>
+					<ul>
+						<li>"O": <i>terminar</i></li>
+						<li>"A": <i>terminar</i></li>
+						<li>"B": <i>terminar</i></li>
+						<li>"C": <i>terminar</i></li>
+						<li>"D": <i>terminar</i></li>
+						<li>"E": <i>terminar</i></li>
+					</ul>
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="O" />
+					<xs:enumeration value="A" />
+					<xs:enumeration value="B" />
+					<xs:enumeration value="C" />
+					<xs:enumeration value="D" />
+					<xs:enumeration value="E" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="condicaoPeculioEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Condição do pecúlio
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CANCELADO" />
+					<xs:enumeration value="ATIVO" />
+					<xs:enumeration value="MANTIDO" />
+					<xs:enumeration value="MANTIDO_PARCIAL" />
+					<xs:enumeration value="ASSISTIDO" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="tipoEventoEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Tipo de evento a ser disparado no padrão <i>webhook</i>
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="INCLUSAO" />
+					<xs:enumeration value="ATUALIZACAO" />
+					<xs:enumeration value="DESLIGAMENTO" />
+					<xs:enumeration value="RELIGAMENTO" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="severidadeEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Informa severidade da mensagem: <br/>
+					<ul>
+						<li>WARN: alerta que não impede execução do serviço. Exemplo: "Aviso: sistema ficará fora do ar em 24/12 por 5 horas"</li>
+						<li>INFO: mensagem informativa. Ex: retornados 50 registros</li>
+						<li>SUCCESS: mensagem de sucesso da operação </li>
+						<li>FATAL: erro interno de implementação ou de indisponibilidade que possa ser capturado na implementação. Ex: não pôde conectar ao banco de dados</li>
+						<li>ERROR: mensagem que informa erro, geramente de entrada de dado (solicitação) ao serviço</li>
+					</ul>
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="WARN" />
+					<xs:enumeration value="INFO" />
+					<xs:enumeration value="SUCCESS" />
+					<xs:enumeration value="FATAL" />
+					<xs:enumeration value="ERROR" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="encontraPessoaRequest" nillable="true" type="tns:entradaEncontraPessoa" />
+			<xs:element name="encontraPessoaResponse" nillable="true" type="tns:saidaEncontraPessoa" />
+			<xs:element name="registraObservadorRequest" nillable="true" type="tns:entradaRegistraObservador" />
+			<xs:element name="registraObservadorResponse" nillable="true" type="tns:saidaRegistraObservador" />
+			<xs:element name="pesquisaPessoaRequest" nillable="true" type="tns:entradaPesquisaPessoa" />
+			<xs:element name="pesquisaPessoaResponse" nillable="true" type="tns:saidaPesquisaPessoa" />
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="encontraPessoa">
+		<wsdl:part element="tns:encontraPessoaRequest" name="encontraPessoaRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="encontraPessoaResponse">
+		<wsdl:part element="tns:encontraPessoaResponse" name="encontraPessoaResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="registraObservador">
+		<wsdl:part element="tns:registraObservadorRequest" name="registraObservadorRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="registraObservadorResponse">
+		<wsdl:part element="tns:registraObservadorResponse" name="registraObservadorResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="pesquisaPessoa">
+		<wsdl:part element="tns:pesquisaPessoaRequest" name="pesquisaPessoaRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="pesquisaPessoaResponse">
+		<wsdl:part element="tns:pesquisaPessoaResponse" name="pesquisaPessoaResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="cadastro">
+		<wsdl:operation name="encontraPessoa">
+			<wsdl:documentation>Retorna uma pessoa do cadastro</wsdl:documentation>
+			<wsdl:input message="tns:encontraPessoa" name="encontraPessoa"></wsdl:input>
+			<wsdl:output message="tns:encontraPessoaResponse" name="encontraPessoaResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="registraObservador">
+			<wsdl:documentation>Registra uma URL para observar um evento. Quando um evento ocorre, é disparada uma requisição HTTP POST para o observador com os dados seguindo a estrutura do exemplo de retorno.</wsdl:documentation>
+			<wsdl:input message="tns:registraObservador" name="registraObservador"></wsdl:input>
+			<wsdl:output message="tns:registraObservadorResponse" name="registraObservadorResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="pesquisaPessoa">
+			<wsdl:documentation>Pesquisa por pessoas no cadastro</wsdl:documentation>
+			<wsdl:input message="tns:pesquisaPessoa" name="pesquisaPessoa">	
+			</wsdl:input>
+			<wsdl:output message="tns:pesquisaPessoaResponse" name="pesquisaPessoaResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="servicesSoapBinding" type="tns:cadastro">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="encontraPessoa">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="encontraPessoa">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="encontraPessoaResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="registraObservador">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="registraObservador">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="registraObservadorResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="pesquisaPessoa">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="pesquisaPessoa">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="pesquisaPessoaResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="services">
+		<wsdl:port binding="tns:servicesSoapBinding" name="cadastroPort">
+			<soap:address location="http://localhost:8080/capesesp-ws/services/cadastro" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
