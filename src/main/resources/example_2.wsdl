@@ -5,6 +5,9 @@
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
 	xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
 	name="services" targetNamespace="http://www.capesesp.com.br/ws/cadastro">
+	
+	<wsdl:documentation>Interface de dados cadastrais de pessoas físicas</wsdl:documentation>
+	
 	<wsdl:types>
 		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 			xmlns:tns="http://www.capesesp.com.br/ws/cadastro"
@@ -47,7 +50,14 @@
 				</xsd:annotation>
 				<xs:sequence>
 					<xs:element name="numero" type="xs:string" />
-					<xs:element name="sequencial" type="xs:string" />
+					<xs:element minOccurs="0" name="sequencial" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>O sequencial, quando não informado, se comporta de duas formas:<br/>
+							1) No método 'encontra', retorna o titular (o mesmo que informar sequencial zero)<br/>
+							2) No método 'pesquisa', retorna todas as pessoas sob a mesma matrícula
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
 				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name="matriculaProtheus">
@@ -133,8 +143,16 @@
 					<xsd:documentation>Representa uma pessoa no cadastro.</xsd:documentation>
 				</xsd:annotation>
 				<xs:sequence>
-					<xs:element minOccurs="0" name="dataAtualizacao" type="xs:dateTime" />
-					<xs:element minOccurs="0" name="dadosPessoais" type="tns:dadosPessoais" />
+					<xs:element minOccurs="0" name="dataAtualizacao" type="xs:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>Última data/hora de atualização (engloba inclusão) da pessoa no cadastro.</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="dadosPessoais" type="tns:dadosPessoais">
+						<xsd:annotation>
+							<xsd:documentation>Conjunto de dados pessoais</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
 					<xs:element minOccurs="0" name="dadosFuncionais" type="tns:dadosFuncionais" />
 					<xs:element minOccurs="0" name="dadosBancarios" type="tns:dadosBancarios" />
 					<xs:element minOccurs="0" name="dadosPrevidenciais" type="tns:dadosPrevidenciais" />
@@ -159,12 +177,12 @@
 					</xs:element>
 					<xs:element minOccurs="0" name="dataNascimento" type="xs:dateTime">
 						<xsd:annotation>
-							<xsd:documentation>Data de nascimento no <a href="https://en.wikipedia.org/wiki/ISO_8601">formato padrão</a></xsd:documentation>
+							<xsd:documentation>Data de nascimento no <a href="https://en.wikipedia.org/wiki/ISO_8601">padrão ISO 8601</a></xsd:documentation>
 						</xsd:annotation>
 					</xs:element>
 					<xs:element minOccurs="0" name="dataObito" type="xs:dateTime">
 						<xsd:annotation>
-							<xsd:documentation>Data de óbito no <a href="https://en.wikipedia.org/wiki/ISO_8601">formato padrão</a></xsd:documentation>
+							<xsd:documentation>Data de óbito no <a href="https://en.wikipedia.org/wiki/ISO_8601">padrão ISO 8601</a></xsd:documentation>
 						</xsd:annotation>
 					</xs:element>
 					<xs:element minOccurs="0" name="sexo" type="tns:sexoEnum"></xs:element>
@@ -449,7 +467,9 @@
 			</xs:complexType>
 			<xs:complexType name="login">
 				<xsd:annotation>
-					<xsd:documentation>Dados de autenticação</xsd:documentation>
+					<xsd:documentation>Dados de autenticação.<br/> 
+					Somente usuários registrados podem interagir na operação em que a estrutura <i>login</i> se encontra.
+					</xsd:documentation>
 				</xsd:annotation>
 				<xs:sequence>
 					<xs:element name="usuario" type="xs:string" />
@@ -467,10 +487,6 @@
 				<xsd:annotation>
 					<xsd:documentation>
 					Representa um evento disparado pelo web service de cadastro.<br/>
-					O disparo de eventos segue o padrão <a href="https://en.wikipedia.org/wiki/Webhook">webhook</a><br/>
-					O sucesso de recebimento do evento deve ser obtido pelo retorno de <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">códigos HTTP</a> 2* (200, 201, 202, etc.) <br/>
-					Qualquer outro código de retorno significa re-envio: até 10 (dez) novas tentativas serão feitas com intervalos aleatoriamente crescentes. <br/>
-					Após 10 tentativas sem sucesso, o envio é cancelado.
 					</xsd:documentation>
 				</xsd:annotation>
 				<xs:sequence>
@@ -495,7 +511,6 @@
 				<xsd:annotation>
 					<xsd:documentation>
 					Representa dados associados à execução de um método do serviço e seus possíveis retornos.<br/>
-					O disparo de eventos segue o padrão <a href="https://en.wikipedia.org/wiki/Webhook">webhook</a>
 					</xsd:documentation>
 				</xsd:annotation>
 				<xs:sequence>
@@ -762,7 +777,7 @@
 			<xs:simpleType name="tipoEventoEnum">
 				<xsd:annotation>
 					<xsd:documentation>
-					Tipo de evento a ser disparado no padrão <i>webhook</i>
+					Tipo de evento a ser disparado
 					</xsd:documentation>
 				</xsd:annotation>
 				<xs:restriction base="xs:string">
@@ -833,7 +848,14 @@
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="registraObservador">
-			<wsdl:documentation>Registra uma URL para observar um evento. Quando um evento ocorre, é disparada uma requisição HTTP POST para o observador com os dados seguindo a estrutura do exemplo de retorno.</wsdl:documentation>
+			<wsdl:documentation>
+				Registra uma URL para observar um evento ocorrido na origem.<br/>
+				O disparo de eventos segue o padrão <a href="https://en.wikipedia.org/wiki/Webhook">webhook</a>.<br/> 
+				Quando um evento ocorre, é disparada uma requisição HTTP POST para o observador (sistema/web service de destino) com os dados seguindo a estrutura do <i>eventoExemplo</i>.<br/>
+				O sucesso de recebimento do evento deve ser obtido pelo retorno de <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">códigos HTTP</a> 200, 201, 202, etc.<br/>
+				Qualquer outro código de retorno significa re-envio: até 10 (dez) novas tentativas serão feitas com intervalos aleatoriamente crescentes. <br/>
+				Após 10 tentativas sem sucesso, o envio é cancelado.
+			</wsdl:documentation>
 			<wsdl:input message="tns:registraObservador" name="registraObservador"></wsdl:input>
 			<wsdl:output message="tns:registraObservadorResponse" name="registraObservadorResponse">
 			</wsdl:output>
