@@ -40,7 +40,7 @@ function collapseAll(){
 function refreshDisplay(detailLevel) {
 	var hideElements, showElements;
 	
-	var uiElements = ["div.documentation", ".element-type", ".restriction", ".range", ".nillable", ".full-detail"];
+	var uiElements = ["div.documentation", ".range", ".element-type", ".restriction", ".nillable", ".full-detail"];
 	
 	for(var i = 0; i < uiElements.length; i++) {
 		if(i < detailLevel) {
