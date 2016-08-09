@@ -17,7 +17,6 @@
 		<ui:include src="/jumbotron.xhtml" />
 		
 		<div class="container-fluid">
-			<ui:include src="about_#{localeSwitcher.locale}.xhtml"/>
 			
 			<div class="row">
 				<div class="col-xs-12 col-sm-4">
@@ -26,8 +25,8 @@
 					<h:form class="form-inline" id="wsdl">
 						<div class="form-group">
 							<label class="sr-only" for="service">#{app.wsdl}</label>
-							<h:inputText id="url" name="bob" value="#{wsdlBean.wsdlUrl}" class="col-xs-8" placeholder="#{app.type_url}" required="true" />
-							&#160;<h:commandButton value="#{app.submit}" class="btn btn-primary" action="#{wsdlBean.typeWsdl}" />
+							<h:inputText id="url" value="#{wsdlBean.wsdlUrl}" class="col-xs-8" placeholder="#{app.type_url}" required="true" />
+							&#160;<h:commandButton value="#{app.submit}" id="type-wsdl" class="btn btn-primary" action="#{wsdlBean.typeWsdl}" />
 						</div>
 						<p class="validation-message">
 							<h:message 
@@ -73,26 +72,180 @@
 				<div class="col-xs-12 col-sm-4">
 					<h2>#{app.examples}</h2>
 					<p>#{app.examples_description}</p>
+					<h:form>
+						<input type="hidden" id="exampleName" name="exampleName" value="/example_1.wsdl"/>
+						<h:commandLink action="#{wsdlBean.example}" value="#{app.example} 1" />
+					</h:form>
+					<h:form>
+						<input type="hidden" id="exampleName" name="exampleName" value="/example_2.wsdl"/>
+						<h:commandLink action="#{wsdlBean.example}" value="#{app.example} 2" />	
+					</h:form>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>#{app.web_services}</h1>
+					<p>#{app.web_service_notes}</p>
+										
+					<h2>Capesesp</h2>
+					<h:form>
+						<table class="table">
+							<tr>
+								<td class="col-xs-12">
+									<a class="cape-link" href="https://webservices.capesesp.com.br/capesesp-ws/services/amuc?wsdl">AMUC (auxílio medicamento de uso contínuo)</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="col-xs-12">
+									<a class="cape-link" href="https://webservices.capesesp.com.br/capesesp-ws/services/cadastro?wsdl">Cadastro de pessoas físicas</a>
+								</td>
+							</tr>
+						</table>
+					</h:form>
+	
+					<h2 class="servicosTitulo">Protheus</h2>
 					<table class="table">
 						<tr>
 							<td class="col-xs-12">
-								<h:form>
-									<input type="hidden" id="exampleName" name="exampleName" value="/example_1.wsdl"/>
-									<h:commandLink action="#{wsdlBean.example}" value="#{app.example} 1" />	
-								</h:form>
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/cadastro?wsdl">Cadastro</a>
 							</td>
 						</tr>
 						<tr>
 							<td class="col-xs-12">
-								<h:form>
-									<input type="hidden" id="exampleName" name="exampleName" value="/example_2.wsdl"/>
-									<h:commandLink action="#{wsdlBean.example}" value="#{app.example} 2" />	
-								</h:form>
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/emprestimo?wsdl">Empréstimo</a>
 							</td>
 						</tr>
-					</table>	
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/financeiro?wsdl">Financeiro</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/contabilidade?wsdl">Contabilidade</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/cadastro?wsdl">Cadastro</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/odontologico?wsdl">Odontológico</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/autorizacaoprevia?wsdl">Autorização prévia</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/comprovanterendimento?wsdl">Comprovante de rendimento</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/usuarioativo?wsdl">Usuário ativo</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/credenciado?wsdl">Credenciado</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/cronogramapagamento?wsdl">Cronograma de pagamentos</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/demonstrativocontribuicoes?wsdl">Demonstrativo de contribuições</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/gerenciasregionais?wsdl">Gerências regionais</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/informecontribuicoes?wsdl">Informe de contribuições</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/margem?wsdl">Margens de cadastro e empréstimo</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/reservapoupanca?wsdl">Reserva de poupança</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/titulobancario?wsdl">Segunda via de boleto bancário</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/carteirinha?wsdl">Segunda via de carteirinha</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/protheus-ws/services/tabelamedica?wsdl">Tabelas médicas</a>
+							</td>
+						</tr>
+					</table>
+					
+					<h2 class="servicosTitulo">TotalPrev</h2>
+					<table class="table">
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/totalprev-ws/services/cadastro?wsdl">Cadastro</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/totalprev-ws/services/beneficiario?wsdl">Beneficiário (para Call center e empréstimo)</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/totalprev-ws/services/contabilidade?wsdl">Contabilidade</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/totalprev-ws/services/financeiro?wsdl">Financeiro</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/totalprev-ws/services/arquivoEspelho?wsdl">Arquivo espelho SIAPE</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/totalprev-ws/services/informerendimentosassistido?wsdl">Informe de Rendimentos do Assistido</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="col-xs-12">
+								<a class="cape-link" href="https://webservices.capesesp.com.br/totalprev-ws/services/margem?wsdl">Margem de cadastro e empréstimo</a>
+							</td>
+						</tr>
+					</table>
+				
 				</div>
 			</div>
+			
+			<ui:include src="about_#{localeSwitcher.locale}.xhtml"/>
 			
 		</div>
 	</h:body>
