@@ -572,6 +572,11 @@ li.aberto ul.messagePart {
 	margin-top: 2em;
 }
 
+.documentation-value {
+	display: inline;
+	font-size: 0.9em;
+}
+
 .documentation {
 	font-size: 0.9em;
 	padding-left: 9px; /* 6px */

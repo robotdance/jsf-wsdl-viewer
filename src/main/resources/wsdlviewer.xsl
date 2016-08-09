@@ -88,6 +88,16 @@
 		<xsl:apply-templates select="/*" mode="html-title.render" />
 	</xsl:variable>
 
+	<xsl:template match="*" mode="copy">
+	  <xsl:element name="{name()}" namespace="{namespace-uri()}">
+	    <xsl:apply-templates select="@*|node()" mode="copy" />
+	  </xsl:element>
+	</xsl:template>
+
+	<xsl:template match="@*|text()|comment()" mode="copy">
+	  <xsl:copy/>
+	</xsl:template>
+
 	<xsl:template match="@*" mode="qname.normalized">
 		<xsl:variable name="local" select="substring-after(., ':')" />
 		<xsl:choose>
@@ -137,7 +147,7 @@
 		<xsl:if test="$ENABLE-DESCRIPTION and string-length(.) &gt; 0">
 			<div class="lbl"><xsl:value-of select="$i18n/description"/></div>
 			<div class="value">
-				<xsl:copy-of select="node()" />
+				<xsl:apply-templates mode="copy" select="node()" />
 			</div>
 		</xsl:if>
 	</xsl:template>
@@ -300,7 +310,7 @@
 		<xsl:variable name="port-type"
 			select="$consolidated-wsdl/ws:portType[@name = $port-type-name]" />
 
-		<h3>
+		<h3 class="full-detail">
 			<xsl:value-of select="$i18n/port"/>&#160;<b class="port"><xsl:value-of select="@name" /></b>
 			<xsl:if test="$ENABLE-LINK">
 				<xsl:text> </xsl:text>
@@ -315,9 +325,11 @@
 			</xsl:if>
 		</h3>
 
-		<div class="lbl"><xsl:value-of select="$i18n/address"/></div>
-		<div class="value">
-			<xsl:value-of select="*[local-name() = 'address']/@location" />
+		<div class="full-detail">
+			<div class="lbl"><xsl:value-of select="$i18n/address"/></div>
+			<div class="value">
+				<xsl:value-of select="*[local-name() = 'address']/@location" />
+			</div>
 		</div>
 
 		<div class="full-detail">
@@ -477,7 +489,7 @@
 	</xsl:template>
 	
 	<xsl:template match="ws:portType" mode="operations">
-		<div>
+		<div class="operations operation-details">
 			<xsl:if test="position() != last()">
 				<xsl:attribute name="class">port</xsl:attribute>
 			</xsl:if>
@@ -517,7 +529,7 @@
 				<div class="lbl"><xsl:value-of select="$i18n/description"/></div>
 				<div class="value">
 					<div class="documentation-value">
-						<xsl:copy-of select="ws:documentation" />
+						<xsl:apply-templates mode="copy" select="ws:documentation/node()" />
 					</div>
 				</div>
 			</xsl:if>
@@ -1075,7 +1087,7 @@
 			</div>
 			 -->
 			<div class="documentation-content">
-				<xsl:copy-of select="node()" />
+				<xsl:apply-templates mode="copy" select="node()" />
 			</div>
 		</div>
 	</xsl:template>
@@ -1160,7 +1172,13 @@
 				<span class="text-success required range"><xsl:value-of select="$i18n/required"/>. </span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="text-success required range"><xsl:value-of select="$i18n/between"/> <xsl:value-of select="$min"></xsl:value-of> <xsl:value-of select="$i18n/and"/> <xsl:value-of select="$max"></xsl:value-of> <xsl:value-of select="$i18n/elements"/>.</span>
+				<span class="text-success range">
+					<xsl:value-of select="$i18n/between"/>&#160;
+					<xsl:value-of select="$min"/>&#160;
+					<xsl:value-of select="$i18n/and"/>&#160;
+					<xsl:value-of select="$max"/>&#160;
+					<xsl:value-of select="$i18n/elements"/>.
+				</span>
 			</xsl:otherwise>
 		</xsl:choose>
 		
