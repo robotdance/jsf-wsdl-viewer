@@ -361,7 +361,16 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" name="unidadePagadora" type="tns:unidadePagadora" />
 					<xs:element minOccurs="0" name="tipoAssociado" type="tns:tipoAssociadoEnum" />
-					<xs:element minOccurs="0" name="qualificacao" type="tns:qualificacaoEnum" />
+					<xs:element minOccurs="0" name="statusFinanceiro" type="tns:statusFinanceiroEnum">
+						<xsd:annotation>
+							<xsd:documentation>Status da pessoa física no mérito financeiro em relação à Capesesp.</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="qualificacao" type="tns:qualificacaoEnum">
+						<xsd:annotation>
+							<xsd:documentation>Qualificação da pessoa (SIAPEnet ou Capesesp)</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
 					<xs:element minOccurs="0" name="matriculaSiape" type="tns:matriculaSiape" />
 					<xs:element minOccurs="0" name="orgao" type="tns:orgao" />
 				</xs:sequence>
@@ -461,7 +470,21 @@
 					<xsd:documentation>Representa um observador de eventos que podem ser disparados pelo web service de cadastro.</xsd:documentation>
 				</xsd:annotation>
 				<xs:sequence>
-					<xs:element name="url" type="xs:string" />
+					<xs:element name="url" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>URL do observador</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element name="secretToken" type="xs:string">
+						<xsd:annotation>
+							<xsd:documentation>
+							String que permite ao observador restringir o recebimento de dados. <br/>
+							Uma boa prática é gerar um token com as mesmas regras de uma senha forte. <br/>
+							Quando um evento for disparado, esse token será enviado no corpo do XML de requisição (quando houver o campo na estrutura de retorno) e no header
+							<code>X-Cape-Signature</code>
+							</xsd:documentation>
+						</xsd:annotation>
+					</xs:element>
 					<xs:element name="tipoEvento" type="tns:tipoEventoEnum" />
 				</xs:sequence>
 			</xs:complexType>
@@ -720,15 +743,31 @@
 					<xs:enumeration value="DEPENDENTE_AGREGADO" />
 				</xs:restriction>
 			</xs:simpleType>
+			<xs:simpleType name="statusFinanceiroEnum">
+				<xsd:annotation>
+					<xsd:documentation>
+					Representa status financeiro em relação à Capesesp
+					</xsd:documentation>
+				</xsd:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ATIVO" />
+					<xs:enumeration value="EM_SUSPENSAO" />
+					<xs:enumeration value="SUSPENSO" />
+					<xs:enumeration value="EM_DESLIGAMENTO" />
+					<xs:enumeration value="DESLIGADO" />
+				</xs:restriction>
+			</xs:simpleType>
+
 			<xs:simpleType name="qualificacaoEnum">
 				<xsd:annotation>
 					<xsd:documentation>
-					Qualificação da pessoa (SIAPEnet)
+					Qualificação da pessoa (SIAPEnet ou Capesesp)
 					</xsd:documentation>
 				</xsd:annotation>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="PENSIONISTA" />
 					<xs:enumeration value="SERVIDOR" />
+					<xs:enumeration value="FUNCIONARIO" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType name="tipoDadoBancarioEnum">
