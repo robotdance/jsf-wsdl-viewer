@@ -1,18 +1,12 @@
 package org.robotdance.wsdlviewer;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.xml.transform.OutputKeys;
@@ -24,13 +18,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
  * Transforms WSDL in HTML using XSLT
@@ -102,28 +89,4 @@ public class WsdlTransformer  {
 			throw new WsdlTransformException(e);
 		}
 	}
-	
-	/**
-	 * Gets the WSDL contents
-	 * @param serviceURL
-	 * @return String with WSDL contents
-	 * @throws ServletException
-	 */
-	public String retrieve(String serviceURL) throws WsdlRetrieveException {
-		try {
-			HttpGet httpGet = new HttpGet(serviceURL);
-			HttpClient httpClient = HttpClientBuilder.create().build();
-			ResponseHandler<String> responseHandler = new BasicResponseHandler( );
-			String wsdlResponse;
-			wsdlResponse = httpClient.execute(httpGet, responseHandler);
-			return wsdlResponse;
-			
-		} catch (ClientProtocolException e) {
-			throw new WsdlRetrieveException(e);
-			
-		} catch (IOException e) {
-			throw new WsdlRetrieveException(e);
-		}
-	}
-	
 }

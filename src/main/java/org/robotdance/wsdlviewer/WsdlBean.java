@@ -1,9 +1,9 @@
 package org.robotdance.wsdlviewer;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
-import java.util.Scanner;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -16,6 +16,10 @@ import javax.servlet.http.Part;
 @SessionScoped
 public class WsdlBean {
 	
+	private static final String OUTCOME_INDEX = "index";
+
+	private static final String OUTCOME_WSDL = "wsdl";
+
 	private Part file;
 	
 	private String wsdlContent;
@@ -24,71 +28,85 @@ public class WsdlBean {
 	
 	private String transformedWsdl;
 	
-	private String exampleName;
-
+	private String example;
+	
+	private Map<String, String> getRequest() {
+		return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();		
+	}
+	
+	private Locale getLocale() {
+		return FacesContext.getCurrentInstance().getViewRoot().getLocale();
+	}
+	
 	public String typeWsdl() {
+		return transformByUrl(wsdlUrl);
+	}
+
+	public String transformByUrl(String url) {
 		try {
-			Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
-			wsdlContent = WsdlTransformer.getInstance().retrieve(wsdlUrl);
-			transformedWsdl = WsdlTransformer.getInstance().transform(wsdlContent, locale);
-			return "success";
+			wsdlContent = WsdlContent.fromUrl(new URL(url));
+			transformedWsdl = WsdlTransformer.getInstance().transform(wsdlContent, getLocale());
+			return OUTCOME_WSDL;
 			
 		} catch (WsdlTransformException e) {
 			Messages.TRANSFORM_ERROR.addToFacesContext("wsdl:url", FacesMessage.SEVERITY_ERROR);
-			return "error";
 			
-		} catch (WsdlRetrieveException e) {
+		} catch (WsdlContentException e) {
 			Messages.READING_ERROR.addToFacesContext("wsdl:url", FacesMessage.SEVERITY_ERROR);
-			return "error";
+			
+		} catch (MalformedURLException e) {
+			Messages.READING_ERROR.addToFacesContext("wsdl:url", FacesMessage.SEVERITY_ERROR);
 		}
+		return OUTCOME_INDEX;
 	}
 	
 	public String upload() {
 		try {
-			Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
-			Scanner scanner = new Scanner(file.getInputStream());
-			scanner.useDelimiter("\\A");
-			wsdlContent = scanner.next();
-			transformedWsdl = WsdlTransformer.getInstance().transform(wsdlContent, locale);
-			scanner.close();
-			return "success";
+			wsdlContent = WsdlContent.fromFile(file);
+			transformedWsdl = WsdlTransformer.getInstance().transform(wsdlContent, getLocale());
+			return OUTCOME_WSDL;
 			
 		} catch (NullPointerException e) {
 			Messages.READING_ERROR.addToFacesContext("upload:file", FacesMessage.SEVERITY_ERROR);
-			return "error";
-			
-		} catch (IOException e) {
+
+		} catch (WsdlContentException e) {
 			Messages.READING_ERROR.addToFacesContext(FacesMessage.SEVERITY_ERROR);
-			return "error";
 			
 		} catch (WsdlTransformException e) {
 			Messages.TRANSFORM_ERROR.addToFacesContext(FacesMessage.SEVERITY_ERROR);
-			return "error";
 		}
+		return OUTCOME_INDEX;
 	}
 	
 	public String example() {
 		try {
-			exampleName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("exampleName");
-			Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
-			InputStream is = WsdlTransformer.class.getResourceAsStream(exampleName);
-			Scanner scanner = new Scanner(is);
-			scanner.useDelimiter("\\A");
-			wsdlContent = scanner.next();
-			transformedWsdl = WsdlTransformer.getInstance().transform(wsdlContent, locale);
-			scanner.close();
+			wsdlContent = WsdlContent.fromExample(getRequest().get("example"));
+			transformedWsdl = WsdlTransformer.getInstance().transform(wsdlContent, getLocale());
+			return OUTCOME_WSDL;
+
 		} catch (WsdlTransformException e) {
 			Messages.INTERNAL_ERROR.addToFacesContext(FacesMessage.SEVERITY_FATAL);
+			
 		}
-		return "success";
+		return OUTCOME_INDEX;
 	}
 	
-	/**
-	 * Retorna URL absoluta do app server
-	 * @return
-	 */
 	public String getAppServerURL(){
 		return RequestUtil.getAppServerURL((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest());
+	}
+
+	public String getTransformedWsdl() {
+		if(transformedWsdl == null){
+			String url = getRequest().get("url");
+			if(url != null) {
+				transformByUrl(url);
+			}
+		}
+		return transformedWsdl;
+	}
+
+	public void setTransformedWsdl(String transformedWsdl) {
+		this.transformedWsdl = transformedWsdl;
 	}
 	
 	public Part getFile() {
@@ -112,20 +130,12 @@ public class WsdlBean {
 		this.wsdlUrl = wsdlUrl;
 	}
 
-	public String getTransformedWsdl() {
-		return transformedWsdl;
-	}
-
-	public void setTransformedWsdl(String transformedWsdl) {
-		this.transformedWsdl = transformedWsdl;
-	}
-
 	public String getExampleName() {
-		return exampleName;
+		return example;
 	}
 
 	public void setExampleName(String exampleName) {
-		this.exampleName = exampleName;
+		this.example = exampleName;
 	}
 	
 }
