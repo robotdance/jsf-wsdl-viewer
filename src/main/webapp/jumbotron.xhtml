@@ -12,7 +12,7 @@
 		<div class="container-fluid">
 			<h:form>
 				<f:view locale="#{localeSwitcher.locale}">
-	    			<h:commandLink value="#{app.english}" action="#{localeSwitcher.change('en', null)}" /> - <h:commandLink value="#{app.portuguese}" action="#{localeSwitcher.change('pt', 'BR')}" />
+	    			<h:commandLink value="#{app.english}" action="#{localeSwitcher.change('en')}" /> - <h:commandLink value="#{app.portuguese}" action="#{localeSwitcher.change('pt')}" />
 				</f:view>	
 			</h:form>
 			<h1>#{app.title}<span class="glyphicon glyphicon-cloud"></span></h1>

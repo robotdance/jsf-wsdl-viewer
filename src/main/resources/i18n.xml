@@ -81,7 +81,7 @@
 		<included>Included</included>
 		<service-descriptor>Service descriptor (WSDL)</service-descriptor>
 	</language>
-	<language lang="pt_BR">
+	<language lang="pt">
 		<hello>Olá!</hello>
 		<generated-by>Gerado pelo WSDL-Viewer</generated-by>
 		<port-type>Porta</port-type>
@@ -128,7 +128,7 @@
 				<description>O endpoint apenas envia uma mensagem.</description>
 			</notification>
 		</operation-types>
-		<soap-action>Ação SOAP</soap-action>
+		<soap-action>SOAP Action</soap-action>
 		<http-path>Caminho HTTP</http-path>
 		<none>Nenhum</none>
 		<unknown>Desconhecido</unknown>
