@@ -1,5 +1,6 @@
 package org.robotdance.wsdlviewer;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
@@ -14,9 +15,11 @@ import javax.servlet.http.Part;
 
 @ManagedBean
 @SessionScoped
-public class WsdlBean {
+public class WsdlBean implements Serializable {
 	
-	private static final String OUTCOME_INDEX = "index";
+  private static final long serialVersionUID = -5697334784311144787L;
+
+  private static final String OUTCOME_INDEX = "index";
 
 	private static final String OUTCOME_WSDL = "wsdl";
 
@@ -35,7 +38,8 @@ public class WsdlBean {
 	}
 	
 	private Locale getLocale() {
-		return FacesContext.getCurrentInstance().getViewRoot().getLocale();
+	  Locale locale = new Locale(FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+		return locale;
 	}
 	
 	public String typeWsdl() {
@@ -96,11 +100,9 @@ public class WsdlBean {
 	}
 
 	public String getTransformedWsdl() {
-		if(transformedWsdl == null){
-			String url = getRequest().get("url");
-			if(url != null) {
-				transformByUrl(url);
-			}
+		String url = getRequest().get("url");
+		if(url != null) {
+			transformByUrl(url);
 		}
 		return transformedWsdl;
 	}
