@@ -1764,32 +1764,6 @@
 		</div>
 	</xsl:template>
 
-	<!-- Rendering: navigation -->
-	<xsl:template name="navig.render">
-		<div id="outer_nav">
-			<div id="nav" class="floatcontainer">
-				<ul>
-					<li id="nav-service">
-						<a href="#page.service">Service</a>
-					</li>
-					<li id="nav-operations">
-						<a href="#page.operations">Métodos</a>
-					</li>
-					<li id="nav-wsdl">
-						<a href="#page.src">Source Code</a>
-					</li>
-
-					<!-- <li id="nav-client"><a href="#TODO-1">Client</a></li> -->
-
-					<li id="nav-about">
-						<a href="#page.about" class="current">About</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</xsl:template>
-
-
 	<!-- Rendering: content -->
 	<xsl:template name="content.render">
 		<div id="content">
@@ -1819,9 +1793,6 @@
 
 	<xsl:template name="service.render">
 		<div class="page">
-			<a class="target" name="page.service">
-				<!-- especifico Capesesp <h2> <xsl:value-of select="$html-title"/> </h2> -->
-			</a>
 			<xsl:apply-templates select="$consolidated-wsdl/*[local-name(.) = 'documentation']" mode="documentation.render" />
 			<xsl:apply-templates
 				select="$consolidated-wsdl/ws:service|$consolidated-wsdl/ws2:service"
