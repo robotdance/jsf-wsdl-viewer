@@ -4,13 +4,14 @@
 
     <groupId>org.robotdance</groupId>
     <artifactId>wsdlviewer</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
     <description>A service that generates a friendly document for WSDL web services.</description>
     <url>https://github.com/robotdance/jsf-wsdl-viewer</url>
+
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-v${project.version}</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
