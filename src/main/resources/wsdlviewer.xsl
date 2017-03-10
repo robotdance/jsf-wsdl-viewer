@@ -13,12 +13,12 @@
 	
 	<xsl:variable name="i18n" select="document('i18n.xml')/i18n/language[@lang=$locale]" />
 
-	<xsl:output method="xml" 
+	<xsl:output method="html" 
 	    version="1.0"
 	    encoding="utf-8"
 		indent="yes"
 		omit-xml-declaration="yes" 
-		media-type="text/xml" />
+		media-type="text/html" />
 
 	<xsl:strip-space elements="*" />
 
@@ -1754,14 +1754,14 @@
 	<!-- Rendering: heading -->
 
 	<xsl:template name="title.render">
-	
+	   <!-- 
 		<div id="header">
 			<h1>
-				<a class="small" href="./index.xhtml" title="Home"><span class="glyphicon glyphicon-arrow-left"></span></a>
-				<!-- $html-title substituido por $consolidated-wsdl/@targetNamespace <xsl:value-of select="$html-title"/> -->
+				$html-title substituido por $consolidated-wsdl/@targetNamespace <xsl:value-of select="$html-title"/>
 				Web service: <xsl:value-of select="$consolidated-wsdl/@targetNamespace" />
 			</h1>
 		</div>
+         -->
 	</xsl:template>
 
 	<!-- Rendering: content -->
