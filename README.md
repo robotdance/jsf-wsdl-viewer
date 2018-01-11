@@ -2,7 +2,7 @@
 
 A web application that generates a friendly document for WSDL web services.
 
-[A demo can be seen here](https://webservices.capesesp.com.br/docs)
+[A demo can be seen here](https://webservices.capesesp.com.br/wsdlviewer-v1.0/wsdl.xhtml?url=https://webservices.capesesp.com.br/ws-atendimento/atendimento-soap/atendimento?wsdl)
 
 ## History
 
